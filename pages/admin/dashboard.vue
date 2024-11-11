@@ -1,77 +1,13 @@
 <template>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="flex justify-between items-center mb-8">
-      <h1 class="text-3xl font-bold text-forest-700">Admin Dashboard</h1>
-      <button @click="auth.logout" class="text-red-600 hover:text-red-700">
-        Logout
-      </button>
-    </div>
-
-    <div class="grid md:grid-cols-2 gap-8">
-      <!-- Blog Management -->
-      <div class="bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-xl font-semibold text-forest-600 mb-4">Blog Posts</h2>
-        <button
-          @click="showBlogModal = true"
-          class="mb-4 bg-forest-600 text-white px-4 py-2 rounded-md hover:bg-forest-700"
-        >
-          Add New Post
-        </button>
-        
-        <div class="space-y-4">
-          <div
-            v-for="post in blogPosts"
-            :key="post.id"
-            class="flex items-center justify-between p-4 border rounded-md"
-          >
-            <div>
-              <h3 class="font-semibold">{{ post.title }}</h3>
-              <p class="text-sm text-gray-500">{{ post.date }}</p>
-            </div>
-            <div class="flex space-x-2">
-              <button
-                @click="editPost(post)"
-                class="text-forest-600 hover:text-forest-700"
-              >
-                Edit
-              </button>
-              <button
-                @click="deletePost(post.id)"
-                class="text-red-600 hover:text-red-700"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- User Management -->
-      <div class="bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-xl font-semibold text-forest-600 mb-4">Users</h2>
-        <div class="space-y-4">
-          <div
-            v-for="user in users"
-            :key="user.id"
-            class="flex items-center justify-between p-4 border rounded-md"
-          >
-            <div>
-              <h3 class="font-semibold">{{ user.email }}</h3>
-              <p class="text-sm text-gray-500">{{ user.role }}</p>
-            </div>
-            <button
-              @click="toggleUserStatus(user.id)"
-              :class="{
-                'px-3 py-1 rounded-md': true,
-                'bg-green-100 text-green-800': user.active,
-                'bg-red-100 text-red-800': !user.active
-              }"
-            >
-              {{ user.active ? 'Active' : 'Inactive' }}
-            </button>
-          </div>
-        </div>
-      </div>
+  <div class="flex h-screen bg-gray-100">
+    <Sidebar />
+    <div class="flex-1 overflow-auto">
+      <Header @logout="handleLogout" />
+      <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <CarbonCreditsTable :carbonCredits="carbonCredits" />
+        <TransactionsTable :transactions="transactions" />
+        <MessagesList :messages="messages" />
+      </main>
     </div>
 
     <!-- Blog Post Modal -->
@@ -108,16 +44,30 @@
 </template>
 
 <script setup>
-const auth = useAuthStore();
+import { ref, reactive } from 'vue'
+import Sidebar from '@/components/admin/Sidebar.vue'
+import Header from '@/components/admin/Header.vue'
+import CarbonCreditsTable from '@/components/admin/CarbonCreditsTable.vue'
+import TransactionsTable from '@/components/admin/TransactionsTable.vue'
+import MessagesList from '@/components/admin/MessagesList.vue'
+import { useAuthStore } from '@/stores/auth'
+import { useCarbonCredits } from '@/composables/useCarbonCredits'
+import { useTransactions } from '@/composables/useTransactions'
+import { useMessages } from '@/composables/useMessages'
+
+const auth = useAuthStore()
+const { carbonCredits } = useCarbonCredits()
+const { transactions } = useTransactions()
+const { messages } = useMessages()
 
 // Blog management
-const showBlogModal = ref(false);
-const editingPost = ref(null);
+const showBlogModal = ref(false)
+const editingPost = ref(null)
 const postForm = reactive({
   title: '',
   content: '',
   image: ''
-});
+})
 
 const blogPosts = ref([
   {
@@ -126,56 +76,37 @@ const blogPosts = ref([
     date: 'Apr 3, 2024',
     content: 'Sample content...'
   }
-]);
-
-// User management
-const users = ref([
-  {
-    id: 1,
-    email: 'admin@example.com',
-    role: 'admin',
-    active: true
-  },
-  {
-    id: 2,
-    email: 'user@example.com',
-    role: 'user',
-    active: true
-  }
-]);
+])
 
 function editPost(post) {
-  editingPost.value = post;
-  Object.assign(postForm, post);
-  showBlogModal.value = true;
+  editingPost.value = post
+  Object.assign(postForm, post)
+  showBlogModal.value = true
 }
 
 function deletePost(id) {
   if (confirm('Are you sure you want to delete this post?')) {
-    blogPosts.value = blogPosts.value.filter(post => post.id !== id);
+    blogPosts.value = blogPosts.value.filter(post => post.id !== id)
   }
 }
 
 function saveBlogPost() {
   if (editingPost.value) {
-    const index = blogPosts.value.findIndex(p => p.id === editingPost.value.id);
-    blogPosts.value[index] = { ...editingPost.value, ...postForm };
+    const index = blogPosts.value.findIndex(p => p.id === editingPost.value.id)
+    blogPosts.value[index] = { ...editingPost.value, ...postForm }
   } else {
     blogPosts.value.push({
       id: Date.now(),
       date: new Date().toLocaleDateString(),
       ...postForm
-    });
+    })
   }
-  showBlogModal.value = false;
-  editingPost.value = null;
-  Object.assign(postForm, { title: '', content: '', image: '' });
+  showBlogModal.value = false
+  editingPost.value = null
+  Object.assign(postForm, { title: '', content: '', image: '' })
 }
 
-function toggleUserStatus(id) {
-  const user = users.value.find(u => u.id === id);
-  if (user) {
-    user.active = !user.active;
-  }
+function handleLogout() {
+  auth.logout()
 }
 </script>
