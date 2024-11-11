@@ -53,7 +53,9 @@ const menuItems = [
   { name: 'Home', path: '/' },
   { name: 'About', path: '/about' },
   { name: 'Marketplace', path: '/marketplace' },
-  { name: 'Contact', path: '/contact' }
+  { name: 'Contact', path: '/contact' },
+  { name: 'Blogs', path: '/blog' }
+
 ]
 
 const toggleMobileMenu = () => {

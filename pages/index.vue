@@ -46,7 +46,7 @@
           <NuxtLink
             v-for="post in recentPosts"
             :key="post.id"
-            :to="`/blog/${post.slug}`"
+            :to="`/blog/${post.id}`"
             class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
           >
             <img
