@@ -1,8 +1,6 @@
 <template>
   <div class="flex h-screen bg-gray-100">
-    <Sidebar />
     <div class="flex-1 overflow-auto ml-64">
-      <Header @logout="handleLogout" />
       <main class="p-6">
         <div class="max-w-7xl mx-auto">
           <h1 class="text-3xl font-bold text-forest-700 mb-8">Dashboard Overview</h1>
@@ -33,6 +31,9 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  layout: 'admin'
+})
 import { ref } from 'vue'
 import Sidebar from '@/components/admin/Sidebar.vue'
 import Header from '@/components/admin/Header.vue'

@@ -1,7 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <TheNavigation />
+  <NuxtLayout>
     <NuxtPage />
-    <TheFooter/>
-  </div>
+  </NuxtLayout>
 </template>
