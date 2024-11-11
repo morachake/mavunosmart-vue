@@ -9,7 +9,6 @@
           <NuxtLink to="/" class="hover:bg-forest-700 px-3 py-2 rounded-md">Home</NuxtLink>
           <NuxtLink to="/about" class="hover:bg-forest-700 px-3 py-2 rounded-md">About</NuxtLink>
           <NuxtLink to="/marketplace" class="hover:bg-forest-700 px-3 py-2 rounded-md">Marketplace</NuxtLink>
-          <NuxtLink to="/dashboard" class="hover:bg-forest-700 px-3 py-2 rounded-md">Dashboard</NuxtLink>
           <NuxtLink to="/contact" class="hover:bg-forest-700 px-3 py-2 rounded-md">Contact</NuxtLink>
         </div>
       </div>
