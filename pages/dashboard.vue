@@ -1,9 +1,9 @@
 <template>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="flex justify-between items-center mb-8">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
       <h1 class="text-3xl font-bold text-forest-700">Analytics Dashboard</h1>
-      <div class="flex space-x-4">
-        <select v-model="timeRange" class="rounded-md border-gray-300">
+      <div class="w-full sm:w-auto">
+        <select v-model="timeRange" class="w-full sm:w-auto rounded-md border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-forest-500 focus:outline-none focus:ring-forest-500">
           <option value="7d">Last 7 days</option>
           <option value="30d">Last 30 days</option>
           <option value="90d">Last 90 days</option>
@@ -11,7 +11,7 @@
       </div>
     </div>
     
-    <div class="grid md:grid-cols-3 gap-6 mb-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
       <div class="bg-white p-6 rounded-lg shadow-md">
         <h3 class="text-lg font-semibold text-gray-700 mb-2">Total Sales</h3>
         <p class="text-3xl font-bold text-forest-600">$45,678</p>
@@ -31,20 +31,24 @@
       </div>
     </div>
 
-    <div class="grid md:grid-cols-2 gap-8 mb-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
       <div class="bg-white p-6 rounded-lg shadow-md">
         <h2 class="text-xl font-semibold text-forest-600 mb-4">Sales Analytics</h2>
-        <LineChart :data="salesData" :options="chartOptions" class="h-64" />
+        <div class="h-64">
+          <LineChart :data="salesData" :options="chartOptions" />
+        </div>
       </div>
 
       <div class="bg-white p-6 rounded-lg shadow-md">
         <h2 class="text-xl font-semibold text-forest-600 mb-4">User Activity</h2>
-        <LineChart :data="userActivityData" :options="chartOptions" class="h-64" />
+        <div class="h-64">
+          <LineChart :data="userActivityData" :options="chartOptions" />
+        </div>
       </div>
     </div>
 
     <div class="bg-white p-6 rounded-lg shadow-md">
-      <div class="flex justify-between items-center mb-6">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <h2 class="text-xl font-semibold text-forest-600">Recent Transactions</h2>
         <button class="text-forest-600 hover:text-forest-700">View All</button>
       </div>
@@ -112,7 +116,36 @@ const userActivityData = {
 
 const chartOptions = {
   responsive: true,
-  maintainAspectRatio: false
+  maintainAspectRatio: false,
+  scales: {
+    y: {
+      beginAtZero: true,
+      ticks: {
+        callback: function(value) {
+          return '$' + value.toLocaleString();
+        }
+      }
+    }
+  },
+  plugins: {
+    legend: {
+      display: false
+    },
+    tooltip: {
+      callbacks: {
+        label: function(context) {
+          let label = context.dataset.label || '';
+          if (label) {
+            label += ': ';
+          }
+          if (context.parsed.y !== null) {
+            label += '$' + context.parsed.y.toLocaleString();
+          }
+          return label;
+        }
+      }
+    }
+  }
 };
 
 const recentTransactions = [

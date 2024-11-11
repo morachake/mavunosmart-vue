@@ -6,6 +6,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxt/image'
   ],
+
   app: {
     head: {
       title: 'Farm Carbon Credits Marketplace',
@@ -16,10 +17,13 @@ export default defineNuxtConfig({
       ]
     }
   },
+
   runtimeConfig: {
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE || '/api'
     }
   },
-  devtools: { enabled: false }
+
+  devtools: { enabled: false },
+  compatibilityDate: '2024-11-11'
 })
