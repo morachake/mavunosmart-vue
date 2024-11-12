@@ -4,8 +4,8 @@
       <div class="flex items-center justify-between h-16">
         <div class="flex items-center">
           <NuxtLink to="/" class="flex items-center space-x-3">
-            <img src="https://www.mavunosmart.org/assets/images/logo/logo-white.png" alt="MavunoSmart Logo" class="h-8 w-auto" />
-            <!-- <span class="text-xl font-bold">MavunoSmart</span> -->
+            <!-- <img src="https://www.mavunosmart.org/assets/images/logo/logo-white.png" alt="MavunoSmart Logo" class="h-8 w-auto" /> -->
+            <span class="text-xl font-bold">MavunoSmart</span>
           </NuxtLink>
         </div>
         <div class="hidden md:flex space-x-4">
@@ -54,7 +54,8 @@ const menuItems = [
   { name: 'About', path: '/about' },
   { name: 'Marketplace', path: '/marketplace' },
   { name: 'Contact', path: '/contact' },
-  { name: 'Blogs', path: '/blog' }
+  { name: 'Blogs', path: '/blog' },
+  {name: 'Offset', path: '/carbonCalculator'}
 
 ]
 
